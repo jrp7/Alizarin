@@ -1,5 +1,5 @@
 ﻿using GameBoy.Net.Devices;
-using GameBoy.Net.Graphics;
+using GameBoy.Net.Devices.Interfaces;
 using Retro.Net.Z80.Peripherals;
 
 namespace GameBoy.Net.Peripherals

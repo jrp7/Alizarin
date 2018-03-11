@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using Retro.Net.Z80.Core;
 using Retro.Net.Z80.Core.Decode;
+using Retro.Net.Z80.Core.Interfaces;
 using Shouldly;
 using Xunit;
 

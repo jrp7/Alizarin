@@ -1,5 +1,6 @@
 ﻿using Retro.Net.Memory;
 using Retro.Net.Memory.Dma;
+using Retro.Net.Memory.Interfaces;
 using Retro.Net.Timing;
 using Retro.Net.Z80.Cache;
 using Retro.Net.Z80.Config;
@@ -39,6 +40,6 @@ namespace Retro.Net.Z80.Memory
         /// </summary>
         /// <param name="address"></param>
         /// <param name="length"></param>
-        protected override void OnAddressWrite(ushort address, ushort length) => _instructionBlockCache.InvalidateCache(address, length);
+        protected override void OnAddressWrite(ushort address, int length) => _instructionBlockCache.InvalidateCache(address, length);
     }
 }

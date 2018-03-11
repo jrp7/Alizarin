@@ -5,11 +5,13 @@ using System.Linq.Expressions;
 using AgileObjects.ReadableExpressions;
 using Newtonsoft.Json;
 using Retro.Net.Memory;
+using Retro.Net.Memory.Interfaces;
 using Retro.Net.Timing;
 using Retro.Net.Z80.Config;
 using Retro.Net.Z80.Peripherals;
 using Retro.Net.Z80.Registers;
 using Retro.Net.Z80.Core.Decode;
+using Retro.Net.Z80.Core.Interfaces;
 using Retro.Net.Z80.Timing;
 using Retro.Net.Z80.Util;
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using Retro.Net.Config;
 using Retro.Net.Exceptions;
+using Retro.Net.Memory.Interfaces;
 
 namespace Retro.Net.Memory
 {
@@ -66,31 +67,24 @@ namespace Retro.Net.Memory
         public byte ReadByte(ushort address) => _memory[address];
 
         /// <summary>
-        /// Reads a word from this address segment.
-        /// </summary>
-        /// <param name="address">The address.</param>
-        /// <returns></returns>
-        public ushort ReadWord(ushort address) => BitConverter.ToUInt16(_memory, address);
-
-        /// <summary>
-        /// Reads bytes from this address segment into a new buffer.
-        /// </summary>
-        /// <param name="address">The address.</param>
-        /// <param name="length">The length.</param>
-        /// <returns></returns>
-        public byte[] ReadBytes(ushort address, int length)
-        {
-            var bytes = new byte[length];
-            Array.Copy(_memory, address, bytes, 0, length);
-            return bytes;
-        }
-
-        /// <summary>
         /// Reads bytes from this address segment into the specified buffer.
+        /// This does not wrap the segment.
+        /// i.e. if address + count is larger than the segment length then this will return a value less than count.
         /// </summary>
-        /// <param name="address">The address.</param>
+        /// <param name="address">The segment address to start reading from.</param>
         /// <param name="buffer">The buffer.</param>
-        public void ReadBytes(ushort address, byte[] buffer) => Array.Copy(_memory, address, buffer, 0, buffer.Length);
+        /// <param name="offset">The offset to start writing to in the buffer.</param>
+        /// <param name="count">The number of bytes to read.</param>
+        /// <returns>
+        /// The number of bytes read into the buffer.
+        /// </returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public int ReadBytes(ushort address, byte[] buffer, int offset, int count)
+        {
+            count = Math.Min(count, Length - address);
+            Array.Copy(_memory, address, buffer, offset, count);
+            return count;
+        }
 
         /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.

@@ -4,6 +4,7 @@ using System.Linq;
 using Retro.Net.Config;
 using Retro.Net.Memory;
 using Retro.Net.Memory.Dma;
+using Retro.Net.Memory.Interfaces;
 using Retro.Net.Timing;
 using Retro.Net.Z80.Config;
 using Retro.Net.Z80.Peripherals;
@@ -24,10 +25,10 @@ namespace Retro.Net.Z80.Memory
         /// <param name="dmaController">The dma controller.</param>
         /// <param name="instructionTimer">The instruction timer.</param>
         public Z80Mmu(IPeripheralManager peripheralManager,
-            IPlatformConfig platformConfig,
-            IMemoryBankController memoryBankController,
-            IDmaController dmaController,
-            IInstructionTimer instructionTimer)
+                      IPlatformConfig platformConfig,
+                      IMemoryBankController memoryBankController,
+                      IDmaController dmaController,
+                      IInstructionTimer instructionTimer)
             : base(GetAddressSegments(peripheralManager, platformConfig, memoryBankController), dmaController, instructionTimer)
         {
         }
@@ -40,13 +41,13 @@ namespace Retro.Net.Z80.Memory
         /// <param name="memoryBankController">The memory bank controller.</param>
         /// <returns></returns>
         private static IEnumerable<IAddressSegment> GetAddressSegments(IPeripheralManager peripheralManager,
-            IPlatformConfig platformConfig,
-            IMemoryBankController memoryBankController)
+                                                                       IPlatformConfig platformConfig,
+                                                                       IMemoryBankController memoryBankController)
         {
-            var memoryBanks =
-                platformConfig.MemoryBanks.GroupBy(x => x.Address)
-                              .Select(x => GetAddressSegment(x.ToArray(), memoryBankController))
-                              .ToArray();
+            var memoryBanks = platformConfig.MemoryBanks
+                                            .GroupBy(x => x.Address)
+                                            .Select(x => GetAddressSegment(x.ToArray(), memoryBankController))
+                                            .ToArray();
             return memoryBanks.Concat(peripheralManager.MemoryMap);
         }
 
@@ -60,7 +61,7 @@ namespace Retro.Net.Z80.Memory
         /// </exception>
         /// <exception cref="System.NotImplementedException">Banked RAM</exception>
         private static IAddressSegment GetAddressSegment(ICollection<IMemoryBankConfig> configs,
-            IMemoryBankController memoryBankController)
+                                                         IMemoryBankController memoryBankController)
         {
             var config = configs.First();
             if (configs.Count == 1)

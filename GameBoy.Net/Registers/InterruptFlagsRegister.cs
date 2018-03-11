@@ -1,6 +1,7 @@
 using GameBoy.Net.Devices;
 using GameBoy.Net.Registers.Interfaces;
 using Retro.Net.Z80.Core;
+using Retro.Net.Z80.Core.Interfaces;
 
 namespace GameBoy.Net.Registers
 {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using GameBoy.Net.Media.Interfaces;
 using Retro.Net.Util;
 
 namespace GameBoy.Net.Media

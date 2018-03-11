@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Retro.Net.Timing;
+using Retro.Net.Z80.Core.Interfaces;
 using Retro.Net.Z80.Registers;
 
 namespace Retro.Net.Z80.Core
@@ -128,7 +129,7 @@ namespace Retro.Net.Z80.Core
         /// Gets a task that will wait for next interrupt.
         /// </summary>
         /// <returns></returns>
-        public async Task<ushort> WaitForNextInterrupt() => await _interruptTask.ConfigureAwait(false);
+        public async Task<ushort> WaitForNextInterrupt() => await _interruptTask;
 
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
@@ -151,7 +152,7 @@ namespace Retro.Net.Z80.Core
             {
                 while (!_cancellationSource.IsCancellationRequested)
                 {
-                    var address = await _nextInterruptSource.Task.ConfigureAwait(false);
+                    var address = await _nextInterruptSource.Task;
                     _nextInterruptSource = new TaskCompletionSource<ushort>();
 
                     if (!_registers.InterruptFlipFlop1)
@@ -172,7 +173,7 @@ namespace Retro.Net.Z80.Core
                     }
 
                     // Wait for the halt to be confirmed
-                    await _haltTaskSource.Task.ConfigureAwait(false);
+                    await _haltTaskSource.Task;
                     _haltTaskSource = new TaskCompletionSource<bool>();
 
                     // Resume the CPU with the program counter set to address

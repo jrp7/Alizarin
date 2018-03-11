@@ -1,6 +1,8 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 using Retro.Net.Memory;
+using Retro.Net.Memory.Interfaces;
+using Retro.Net.Z80.Core.Interfaces;
 using Retro.Net.Z80.Peripherals;
 using Retro.Net.Z80.Registers;
 using Retro.Net.Z80.Timing;

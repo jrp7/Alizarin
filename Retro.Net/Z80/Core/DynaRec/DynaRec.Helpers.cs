@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Retro.Net.Z80.Core.Decode;
+using Retro.Net.Z80.Core.Interfaces;
 
 namespace Retro.Net.Z80.Core.DynaRec
 {

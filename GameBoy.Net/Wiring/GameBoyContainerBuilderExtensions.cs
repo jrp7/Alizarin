@@ -1,7 +1,7 @@
 ﻿using System;
 using Autofac;
 using GameBoy.Net.Config;
-using GameBoy.Net.Graphics;
+using GameBoy.Net.Devices.Interfaces;
 using Retro.Net.Wiring;
 
 namespace GameBoy.Net.Wiring

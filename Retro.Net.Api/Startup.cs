@@ -7,24 +7,22 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using GameBoy.Net;
 using GameBoy.Net.Config;
-using GameBoy.Net.Graphics;
+using GameBoy.Net.Devices.Interfaces;
 using GameBoy.Net.Wiring;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Retro.Net.Api.Middleware;
+using Retro.Net.Api.Infrastructure;
 using Retro.Net.Api.RealTime;
 using Retro.Net.Api.RealTime.Interfaces;
+using Retro.Net.Api.Services;
+using Retro.Net.Api.Services.Interfaces;
 using Retro.Net.Wiring;
 
 namespace Retro.Net.Api
 {
     public class Startup
     {
-        public const string ApiRootPath = "/api";
-        public const string WebSocketRootPath = "/ws";
-
         private const string CartridgeResource = "cartridge.zip";
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -36,7 +34,7 @@ namespace Retro.Net.Api
             var builder = new ContainerBuilder();
             builder.Populate(services);
 
-            builder.RegisterType<SingleCoreWebSocketContext>().As<IWebSocketContext>().SingleInstance();
+            builder.RegisterType<SingleCoreGameBoyContext>().As<IGameBoyContext>().SingleInstance();
             builder.RegisterType<WebSocketRenderer>().As<IRenderer>().As<IWebSocketRenderer>().InZ80Scope();
             builder.RegisterType<WebSocketMessageSerializer>().As<IWebSocketMessageSerializer>().SingleInstance();
 

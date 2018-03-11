@@ -5,6 +5,7 @@ using System.Linq;
 using Autofac.Extras.Moq;
 using Moq;
 using Retro.Net.Memory;
+using Retro.Net.Memory.Interfaces;
 using Retro.Net.Tests.Util;
 using Retro.Net.Timing;
 using Retro.Net.Z80.Config;

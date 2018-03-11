@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Retro.Net.Memory;
 using Retro.Net.Z80.Core;
+using Retro.Net.Z80.Core.Interfaces;
 
 namespace Retro.Net.Z80.Cache
 {
@@ -62,7 +63,7 @@ namespace Retro.Net.Z80.Cache
         /// </summary>
         /// <param name="address"></param>
         /// <param name="length"></param>
-        public void InvalidateCache(ushort address, ushort length)
+        public void InvalidateCache(ushort address, int length)
         {
             var ranges = AddressRange.GetRanges(address, length).ToArray();
             if (ranges.Length == 1)

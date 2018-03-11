@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using LZ4;
 using MessagePack;
+using Retro.Net.Api.RealTime.Extensions;
 
 namespace Retro.Net.Api.RealTime.Models
 {

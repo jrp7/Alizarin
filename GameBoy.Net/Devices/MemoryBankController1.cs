@@ -1,5 +1,6 @@
 ﻿using System;
 using Retro.Net.Memory;
+using Retro.Net.Memory.Interfaces;
 
 namespace GameBoy.Net.Devices
 {
@@ -10,7 +11,6 @@ namespace GameBoy.Net.Devices
     /// Any newer MBC chips are working similar, so that is relative easy to upgrade a program from one MBC chip to another - or even to make it compatible to several different types of MBCs.
     /// Note that the memory in range 0000-7FFF is used for both reading from ROM, and for writing to the MBCs Control Registers.
     /// </summary>
-    /// <seealso cref="Retro.Net.Common.Contracts.Memory.IMemoryBankController" />
     public class MemoryBankController1 : IMemoryBankController
     {
         private const ushort Address = 0x0000;
@@ -98,27 +98,25 @@ namespace GameBoy.Net.Devices
         }
 
         /// <summary>
-        /// Writes a word to this address segment.
+        /// Writes the bytes in the specified buffer to this address segment.
+        /// This does not wrap the segment.
+        /// i.e. if address + count is larger than the segment length then this will return a value less than count.
         /// </summary>
-        /// <param name="address">The address.</param>
-        /// <param name="word">The word.</param>
-        public void WriteWord(ushort address, ushort word)
+        /// <param name="address">The segment address to start writing to.</param>
+        /// <param name="buffer">The buffer.</param>
+        /// <param name="offset">The offset to start reading from in the buffer.</param>
+        /// <param name="count">The number of bytes to write.</param>
+        /// <returns>
+        /// The number of bytes written into this segment.
+        /// </returns>
+        public int WriteBytes(ushort address, byte[] buffer, int offset, int count)
         {
-            WriteByte(address, (byte) (word & 0xff));
-            WriteByte(address, (byte) ((word & 0xff00) >> 8));
-        }
-
-        /// <summary>
-        /// Writes bytes to this address segment.
-        /// </summary>
-        /// <param name="address">The address.</param>
-        /// <param name="values">The values.</param>
-        public void WriteBytes(ushort address, byte[] values)
-        {
-            for (var i = 0; i < values.Length; i++, address++)
+            count = Math.Min(count, Length - address);
+            for (var i = 0; i < count; i++)
             {
-                WriteByte(address, values[i]);
+                WriteByte((ushort) (address + i), buffer[i + offset]);
             }
+            return count;
         }
 
         /// <summary>

@@ -1,6 +1,8 @@
 ﻿using Autofac;
 using Autofac.Features.OwnedInstances;
+using Retro.Net.Wiring.Interfaces;
 using Retro.Net.Z80.Core;
+using Retro.Net.Z80.Core.Interfaces;
 
 namespace Retro.Net.Wiring
 {

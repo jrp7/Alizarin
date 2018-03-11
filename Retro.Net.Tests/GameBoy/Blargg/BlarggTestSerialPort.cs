@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using GameBoy.Net.Devices;
+using GameBoy.Net.Devices.Interfaces;
 
 namespace Retro.Net.Tests.GameBoy.Blargg
 {

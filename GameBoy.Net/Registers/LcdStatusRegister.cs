@@ -1,4 +1,5 @@
 ﻿using GameBoy.Net.Devices;
+using GameBoy.Net.Devices.Graphics;
 using GameBoy.Net.Registers.Interfaces;
 
 namespace GameBoy.Net.Registers

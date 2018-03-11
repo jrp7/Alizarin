@@ -1,4 +1,7 @@
 ﻿using System;
+using System.IO;
+using Retro.Net.Memory.Interfaces;
+using Retro.Net.Util;
 
 namespace Retro.Net.Memory
 {
@@ -8,12 +11,7 @@ namespace Retro.Net.Memory
     /// </summary>
     public class PrefetchQueue : IPrefetchQueue
     {
-        private const int CacheSize = 64;
-
-        private readonly IMmu _mmu;
-
-        private byte[] _cache;
-        private int _cachePointer;
+        private readonly Stream _stream;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PrefetchQueue" /> class.
@@ -21,17 +19,8 @@ namespace Retro.Net.Memory
         /// <param name="mmu">The mmu.</param>
         public PrefetchQueue(IMmu mmu)
         {
-            _mmu = mmu;
-            ReBuildCache(0x0000);
+            _stream = mmu.GetStream(0, writable: false);
         }
-
-        /// <summary>
-        /// Gets the address.
-        /// </summary>
-        /// <value>
-        /// The address.
-        /// </value>
-        public ushort BaseAddress { get; private set; }
 
         /// <summary>
         /// Gets the next byte in the prefetch queue.
@@ -39,13 +28,7 @@ namespace Retro.Net.Memory
         /// <returns>The next byte in the prefetch queue</returns>
         public byte NextByte()
         {
-            var value = _cache[_cachePointer];
-
-            if (++_cachePointer == CacheSize)
-            {
-                NudgeCache();
-            }
-
+            var value = (byte) _stream.ReadByte();
             TotalBytesRead++;
             return value;
         }
@@ -57,24 +40,9 @@ namespace Retro.Net.Memory
         /// <returns>The next bytes in the prefetch queue.</returns>
         public byte[] NextBytes(int length)
         {
-            var bytes = new byte[length];
-            var bytesRead = 0;
-
-            while (bytesRead < length)
-            {
-                var bytesToRead = Math.Min(length - bytesRead, CacheSize - _cachePointer);
-                Array.Copy(_cache, _cachePointer, bytes, bytesRead, bytesToRead);
-                bytesRead += bytesToRead;
-
-                _cachePointer += bytesToRead;
-                if (_cachePointer == CacheSize)
-                {
-                    NudgeCache();
-                }
-            }
-
+            var buffer = _stream.ReadBuffer(length);
             TotalBytesRead += length;
-            return bytes;
+            return buffer;
         }
 
         /// <summary>
@@ -83,37 +51,17 @@ namespace Retro.Net.Memory
         /// <returns>The next word in the prefetch queue.</returns>
         public ushort NextWord()
         {
-            if (CacheSize - _cachePointer == 1)
-            {
-                // If there's only one byte left then we need to read it then the next byte from the next cache
-                var lsb = NextByte();
-                var msb = NextByte();
-
-                return BitConverter.ToUInt16(new[] { lsb, msb }, 0);
-            }
-
-            var value = BitConverter.ToUInt16(_cache, _cachePointer);
-
-            _cachePointer += 2;
-            if (_cachePointer == CacheSize)
-            {
-                NudgeCache();
-            }
-
-            TotalBytesRead += 2;
-            return value;
+            var buffer = NextBytes(2);
+            return BitConverter.ToUInt16(buffer, 0);
         }
 
         /// <summary>
-        /// Re-builds the cache.
+        /// Seeks to the specified address.
         /// </summary>
-        /// <param name="newAddress">The new address.</param>
-        public void ReBuildCache(ushort newAddress)
+        /// <param name="address">The new address.</param>
+        public void Seek(ushort address)
         {
-            // TODO: check if we can re-use this cache, make sure TotalBytesRead is still reset
-            BaseAddress = newAddress;
-            _cachePointer = 0;
-            _cache = _mmu.ReadBytes(BaseAddress, CacheSize);
+            _stream.Seek(address, SeekOrigin.Begin);
             TotalBytesRead = 0;
         }
 
@@ -125,14 +73,5 @@ namespace Retro.Net.Memory
         /// </value>
         public int TotalBytesRead { get; private set; }
         
-        /// <summary>
-        /// Increments the address by <see cref="CacheSize" /> and repopulates the cache.
-        /// </summary>
-        private void NudgeCache()
-        {
-            BaseAddress = (ushort) (BaseAddress + CacheSize);
-            _cachePointer = 0;
-            _cache = _mmu.ReadBytes(BaseAddress, CacheSize);
-        }
     }
 }

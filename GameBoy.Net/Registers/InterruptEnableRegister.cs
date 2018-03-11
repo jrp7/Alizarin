@@ -58,51 +58,23 @@ namespace GameBoy.Net.Registers
         /// <param name="address">The address.</param>
         /// <returns></returns>
         public byte ReadByte(ushort address) => Register;
-
-        /// <summary>
-        /// Reads a word from this address segment.
-        /// If the MMU is implemented correctly, this should never be called on this address segment.
-        /// So throw an exception if we try to.
-        /// </summary>
-        /// <param name="address">The address.</param>
-        /// <returns></returns>
-        /// <exception cref="System.NotSupportedException"></exception>
-        public ushort ReadWord(ushort address)
-        {
-            throw new NotSupportedException();
-        }
-
-        /// <summary>
-        /// Reads bytes from this address segment into a new buffer.
-        /// If the MMU is implemented correctly, length will always == 1. So throw an exception otherwise.
-        /// </summary>
-        /// <param name="address">The address.</param>
-        /// <param name="length">The length.</param>
-        /// <returns></returns>
-        /// <exception cref="System.NotSupportedException"></exception>
-        public byte[] ReadBytes(ushort address, int length)
-        {
-            if (length > 1)
-            {
-                throw new NotSupportedException();
-            }
-            return new[] { Register };
-        }
-
+        
         /// <summary>
         /// Reads bytes from this address segment into the specified buffer.
-        /// If the MMU is implemented correctly, length will always == 1. So throw an exception otherwise.
+        /// This does not wrap the segment.
+        /// i.e. if address + count is larger than the segment length then this will return a value less than count.
         /// </summary>
-        /// <param name="address">The address.</param>
+        /// <param name="address">The segment address to start reading from.</param>
         /// <param name="buffer">The buffer.</param>
-        /// <exception cref="System.NotSupportedException"></exception>
-        public void ReadBytes(ushort address, byte[] buffer)
+        /// <param name="offset">The offset to start writing to in the buffer.</param>
+        /// <param name="count">The number of bytes to read.</param>
+        /// <returns>
+        /// The number of bytes read into the buffer.
+        /// </returns>
+        public int ReadBytes(ushort address, byte[] buffer, int offset, int count)
         {
-            if (buffer.Length > 1)
-            {
-                throw new NotSupportedException();
-            }
-            buffer[0] = Register;
+            buffer[offset] = Register;
+            return 1;
         }
 
         /// <summary>
@@ -111,35 +83,23 @@ namespace GameBoy.Net.Registers
         /// <param name="address">The address.</param>
         /// <param name="value">The value.</param>
         public void WriteByte(ushort address, byte value) => Register = value;
-
+        
         /// <summary>
-        /// Writes a word to this address segment.
-        /// If the MMU is implemented correctly, this should never be called on this address segment.
-        /// So throw an exception if we try to.
+        /// Writes the bytes in the specified buffer to this address segment.
+        /// This does not wrap the segment.
+        /// i.e. if address + count is larger than the segment length then this will return a value less than count.
         /// </summary>
-        /// <param name="address">The address.</param>
-        /// <param name="word">The word.</param>
-        /// <exception cref="System.NotSupportedException"></exception>
-        public void WriteWord(ushort address, ushort word)
+        /// <param name="address">The segment address to start writing to.</param>
+        /// <param name="buffer">The buffer.</param>
+        /// <param name="offset">The offset to start reading from in the buffer.</param>
+        /// <param name="count">The number of bytes to write.</param>
+        /// <returns>
+        /// The number of bytes written into this segment.
+        /// </returns>
+        public int WriteBytes(ushort address, byte[] buffer, int offset, int count)
         {
-            throw new NotSupportedException();
-        }
-
-        /// <summary>
-        /// Writes bytes to this address segment.
-        /// If the MMU is implemented correctly, length will always == 1. So throw an exception otherwise.
-        /// </summary>
-        /// <param name="address">The address.</param>
-        /// <param name="values">The values.</param>
-        /// <exception cref="System.NotSupportedException"></exception>
-        public void WriteBytes(ushort address, byte[] values)
-        {
-            if (values.Length > 1)
-            {
-                throw new NotSupportedException();
-            }
-
-            Register = values[0];
+            Register = buffer[address];
+            return 1;
         }
 
         public string Name => "Interrupt Enable (IE R/W)";
@@ -154,8 +114,8 @@ namespace GameBoy.Net.Registers
         /// </summary>
         public byte Register
         {
-            get { return (byte) _interruptFlag; }
-            set { _interruptFlag = (InterruptFlag) value; }
+            get => (byte) _interruptFlag;
+            set => _interruptFlag = (InterruptFlag) value;
         }
 
         /// <summary>
@@ -223,13 +183,16 @@ namespace GameBoy.Net.Registers
         public bool InterruptEnabled(InterruptFlag flag) => _interruptFlag.HasFlag(flag);
 
         /// <summary>
-        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// Returns a <see cref="string" /> that represents this instance.
         /// </summary>
         /// <returns>
-        /// A <see cref="System.String" /> that represents this instance.
+        /// A <see cref="string" /> that represents this instance.
         /// </returns>
-        public override string ToString()
-            =>
-                $"{Name} ({Address}) = {Register}\nVerticalBlank: {VerticalBlank}\nLcdStatusTriggers: {LcdStatusTriggers}\nTimerOverflow: {TimerOverflow}\nSerialLink: {SerialLink}\nJoyPadPress: {JoyPadPress}";
+        public override string ToString() => $"{Name} ({Address}) = {Register}\n" +
+                                             $"VerticalBlank: {VerticalBlank}\n" +
+                                             $"LcdStatusTriggers: {LcdStatusTriggers}\n" +
+                                             $"TimerOverflow: {TimerOverflow}\n" +
+                                             $"SerialLink: {SerialLink}\n" +
+                                             $"JoyPadPress: {JoyPadPress}";
     }
 }

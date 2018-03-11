@@ -1,4 +1,5 @@
 ﻿using Retro.Net.Config;
+using Retro.Net.Memory.Interfaces;
 
 namespace Retro.Net.Memory
 {
@@ -52,29 +53,15 @@ namespace Retro.Net.Memory
         public byte ReadByte(ushort address) => 0x00;
 
         /// <summary>
-        /// Reads a word from this address segment.
-        /// </summary>
-        /// <param name="address">The address.</param>
-        /// <returns></returns>
-        public ushort ReadWord(ushort address) => 0x0000;
-
-        /// <summary>
-        /// Reads bytes from this address segment into a new buffer.
-        /// </summary>
-        /// <param name="address">The address.</param>
-        /// <param name="length">The length.</param>
-        /// <returns></returns>
-        public byte[] ReadBytes(ushort address, int length) => new byte[length];
-
-        /// <summary>
-        /// Reads bytes from this address segment into the specified buffer.
+        /// Reads the bytes.
         /// </summary>
         /// <param name="address">The address.</param>
         /// <param name="buffer">The buffer.</param>
-        public void ReadBytes(ushort address, byte[] buffer)
-        {
-        }
-
+        /// <param name="offset">The offset.</param>
+        /// <param name="count">The count.</param>
+        /// <returns></returns>
+        public int ReadBytes(ushort address, byte[] buffer, int offset, int count) => count;
+        
         /// <summary>
         /// Writes a byte to this address segment.
         /// </summary>
@@ -85,22 +72,15 @@ namespace Retro.Net.Memory
         }
 
         /// <summary>
-        /// Writes a word to this address segment.
+        /// Writes the bytes.
         /// </summary>
         /// <param name="address">The address.</param>
-        /// <param name="word">The word.</param>
-        public void WriteWord(ushort address, ushort word)
-        {
-        }
-
-        /// <summary>
-        /// Writes bytes to this address segment.
-        /// </summary>
-        /// <param name="address">The address.</param>
-        /// <param name="values">The values.</param>
-        public void WriteBytes(ushort address, byte[] values)
-        {
-        }
+        /// <param name="buffer">The buffer.</param>
+        /// <param name="offset">The offset.</param>
+        /// <param name="count">The count.</param>
+        /// <returns></returns>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public int WriteBytes(ushort address, byte[] buffer, int offset, int count) => count;
 
         /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.

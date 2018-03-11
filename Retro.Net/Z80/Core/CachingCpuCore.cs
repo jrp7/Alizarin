@@ -2,10 +2,12 @@
 using System.Threading.Tasks;
 using Retro.Net.Memory;
 using Retro.Net.Memory.Dma;
+using Retro.Net.Memory.Interfaces;
 using Retro.Net.Timing;
 using Retro.Net.Util;
 using Retro.Net.Z80.Cache;
 using Retro.Net.Z80.Core.Decode;
+using Retro.Net.Z80.Core.Interfaces;
 using Retro.Net.Z80.Peripherals;
 using Retro.Net.Z80.Registers;
 
@@ -61,7 +63,7 @@ namespace Retro.Net.Z80.Core
             {
                 var address = GetNextAddress();
                 var instructionBlock = _instructionBlockCache.GetOrSet(address, () => DecodeBlock(address));
-                await ExecuteInstructionBlockAsync(instructionBlock).ConfigureAwait(false);
+                await ExecuteInstructionBlockAsync(instructionBlock);
             }
         }
     }

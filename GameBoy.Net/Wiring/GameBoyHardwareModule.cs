@@ -1,12 +1,14 @@
 ﻿using Autofac;
 using GameBoy.Net.Config;
 using GameBoy.Net.Devices;
-using GameBoy.Net.Graphics;
+using GameBoy.Net.Devices.Graphics;
+using GameBoy.Net.Devices.Interfaces;
 using GameBoy.Net.Media;
 using GameBoy.Net.Peripherals;
 using GameBoy.Net.Registers;
 using GameBoy.Net.Registers.Interfaces;
 using Retro.Net.Memory;
+using Retro.Net.Memory.Interfaces;
 using Retro.Net.Wiring;
 using Retro.Net.Z80.Config;
 using Retro.Net.Z80.Peripherals;

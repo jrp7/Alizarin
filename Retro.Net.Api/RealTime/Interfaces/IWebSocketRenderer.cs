@@ -1,7 +1,7 @@
 ﻿using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
-using GameBoy.Net.Graphics;
+using GameBoy.Net.Devices.Interfaces;
 
 namespace Retro.Net.Api.RealTime.Interfaces
 {

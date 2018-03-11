@@ -1,6 +1,7 @@
 ﻿using System;
 using Retro.Net.Config;
 using Retro.Net.Exceptions;
+using Retro.Net.Memory.Interfaces;
 
 namespace Retro.Net.Memory
 {
@@ -10,7 +11,7 @@ namespace Retro.Net.Memory
     /// <seealso cref="IReadWriteAddressSegment" />
     public class ArrayBackedMemoryBank : IReadWriteAddressSegment
     {
-        protected readonly byte[] Memory;
+        private readonly byte[] _memory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ArrayBackedMemoryBank"/> class.
@@ -19,7 +20,7 @@ namespace Retro.Net.Memory
         /// <exception cref="MemoryConfigStateException"></exception>
         public ArrayBackedMemoryBank(IMemoryBankConfig memoryBankConfig)
         {
-            Memory = new byte[memoryBankConfig.Length];
+            _memory = new byte[memoryBankConfig.Length];
             Type = memoryBankConfig.Type;
             Address = memoryBankConfig.Address;
             Length = memoryBankConfig.Length;
@@ -35,7 +36,7 @@ namespace Retro.Net.Memory
                                                      memoryBankConfig.Length,
                                                      memoryBankConfig.InitialState.Length);
             }
-            Array.Copy(memoryBankConfig.InitialState, 0, Memory, 0, memoryBankConfig.InitialState.Length);
+            Array.Copy(memoryBankConfig.InitialState, 0, _memory, 0, memoryBankConfig.InitialState.Length);
         }
 
         public MemoryBankType Type { get; }
@@ -44,30 +45,26 @@ namespace Retro.Net.Memory
 
         public ushort Length { get; }
 
-        public byte ReadByte(ushort address) => Memory[address];
+        public byte ReadByte(ushort address) => _memory[address];
 
-        public ushort ReadWord(ushort address) => BitConverter.ToUInt16(Memory, address);
-
-        public byte[] ReadBytes(ushort address, int length)
+        public int ReadBytes(ushort address, byte[] buffer, int offset, int count)
         {
-            var bytes = new byte[length];
-            Array.Copy(Memory, address, bytes, 0, length);
-            return bytes;
+            count = Math.Min(count, Length - address);
+            Array.Copy(_memory, address, buffer, offset, count);
+            return count;
         }
 
-        public void ReadBytes(ushort address, byte[] buffer) => Array.Copy(Memory, address, buffer, 0, buffer.Length);
+        public void WriteByte(ushort address, byte value) => _memory[address] = value;
 
-        public void WriteByte(ushort address, byte value) => Memory[address] = value;
-
-        public void WriteWord(ushort address, ushort word)
+        public int WriteBytes(ushort address, byte[] buffer, int offset, int count)
         {
-            var bytes = BitConverter.GetBytes(word);
-            Memory[address] = bytes[0];
-            Memory[address + 1] = bytes[1];
+            count = Math.Min(count, Length - address);
+            Array.Copy(buffer, offset, _memory, address, count);
+            return count;
         }
-
-        public void WriteBytes(ushort address, byte[] values) => Array.Copy(values, 0, Memory, address, values.Length);
 
         public override string ToString() => $"{Type}: 0x{Address:x4} - 0x{Address + Length - 1:x4}";
+
+        public ArraySegment<byte> Segment(ushort address, int length) => new ArraySegment<byte>(_memory, address, length);
     }
 }

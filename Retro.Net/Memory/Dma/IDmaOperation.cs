@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Retro.Net.Memory.Interfaces;
 using Retro.Net.Timing;
 
 namespace Retro.Net.Memory.Dma

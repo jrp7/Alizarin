@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using Retro.Net.Z80.Config;
 using Retro.Net.Z80.Registers;
 using Retro.Net.Z80.Core.Decode;
+using Retro.Net.Z80.Core.Interfaces;
 
 namespace Retro.Net.Z80.Core.DynaRec
 {

@@ -1,5 +1,6 @@
 ﻿using System;
 using Retro.Net.Z80.Core;
+using Retro.Net.Z80.Core.Interfaces;
 
 namespace Retro.Net.Z80.Cache
 {
@@ -22,6 +23,6 @@ namespace Retro.Net.Z80.Cache
         /// </summary>
         /// <param name="address"></param>
         /// <param name="length"></param>
-        void InvalidateCache(ushort address, ushort length);
+        void InvalidateCache(ushort address, int length);
     }
 }

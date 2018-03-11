@@ -3,9 +3,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Retro.Net.Memory;
 using Retro.Net.Memory.Dma;
+using Retro.Net.Memory.Interfaces;
 using Retro.Net.Timing;
 using Retro.Net.Util;
 using Retro.Net.Z80.Core.Decode;
+using Retro.Net.Z80.Core.Interfaces;
 using Retro.Net.Z80.Peripherals;
 using Retro.Net.Z80.Registers;
 
@@ -144,7 +146,7 @@ namespace Retro.Net.Z80.Core
         {
             if (_paused != null)
             {
-                await _paused.Task.ConfigureAwait(false);
+                await _paused.Task;
             }
 
             var timings = instructionBlock.ExecuteInstructionBlock(_registers, _mmu, _alu, _peripheralManager);
@@ -166,7 +168,7 @@ namespace Retro.Net.Z80.Core
                 {
                     // Notify halt success before halting
                     _interruptManager.NotifyHalt();
-                    _interruptAddress = await _interruptManager.WaitForNextInterrupt().ConfigureAwait(false);
+                    _interruptAddress = await _interruptManager.WaitForNextInterrupt();
 
                     // Push the program counter onto the stack
                     _registers.StackPointer = (ushort) (_registers.StackPointer - 2);

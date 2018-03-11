@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using GameBoy.Net.Devices.Interfaces;
 using GameBoy.Net.Registers.Interfaces;
 using Retro.Net.Memory;
+using Retro.Net.Memory.Interfaces;
 
 namespace GameBoy.Net.Devices
 {
@@ -97,42 +99,27 @@ namespace GameBoy.Net.Devices
         }
 
         /// <summary>
-        /// Reads a word from this address segment.
-        /// </summary>
-        /// <param name="address">The address.</param>
-        /// <returns></returns>
-        public ushort ReadWord(ushort address)
-        {
-            var bytes = ReadBytes(address, 2);
-            return BitConverter.ToUInt16(bytes, 0);
-        }
-
-        /// <summary>
-        /// Reads bytes from this address segment into a new buffer.
-        /// </summary>
-        /// <param name="address">The address.</param>
-        /// <param name="length">The length.</param>
-        /// <returns></returns>
-        public byte[] ReadBytes(ushort address, int length)
-        {
-            var bytes = new byte[length];
-            ReadBytes(address, bytes);
-            return bytes;
-        }
-
-        /// <summary>
         /// Reads bytes from this address segment into the specified buffer.
+        /// This does not wrap the segment.
+        /// i.e. if address + count is larger than the segment length then this will return a value less than count.
         /// </summary>
-        /// <param name="address">The address.</param>
+        /// <param name="address">The segment address to start reading from.</param>
         /// <param name="buffer">The buffer.</param>
-        public void ReadBytes(ushort address, byte[] buffer)
+        /// <param name="offset">The offset to start writing to in the buffer.</param>
+        /// <param name="count">The number of bytes to read.</param>
+        /// <returns>
+        /// The number of bytes read into the buffer.
+        /// </returns>
+        public int ReadBytes(ushort address, byte[] buffer, int offset, int count)
         {
-            for (var i = 0; i < buffer.Length; i++)
+            count = Math.Min(count, Length - address);
+            for (var i = 0; i < count; i++)
             {
-                buffer[i] = ReadByte((ushort) (address + i));
+                buffer[i + offset] = ReadByte((ushort) (address + i));
             }
+            return count;
         }
-
+        
         /// <summary>
         /// Writes a byte to this address segment.
         /// </summary>
@@ -153,29 +140,28 @@ namespace GameBoy.Net.Devices
                 _missingRegisters.Add(address);
             }
         }
-
+        
         /// <summary>
-        /// Writes a word to this address segment.
+        /// Writes the bytes in the specified buffer to this address segment.
+        /// This does not wrap the segment.
+        /// i.e. if address + count is larger than the segment length then this will return a value less than count.
         /// </summary>
-        /// <param name="address">The address.</param>
-        /// <param name="word">The word.</param>
-        public void WriteWord(ushort address, ushort word)
+        /// <param name="address">The segment address to start writing to.</param>
+        /// <param name="buffer">The buffer.</param>
+        /// <param name="offset">The offset to start reading from in the buffer.</param>
+        /// <param name="count">The number of bytes to write.</param>
+        /// <returns>
+        /// The number of bytes written into this segment.
+        /// </returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public int WriteBytes(ushort address, byte[] buffer, int offset, int count)
         {
-            var bytes = BitConverter.GetBytes(word);
-            WriteBytes(address, bytes);
-        }
-
-        /// <summary>
-        /// Writes bytes to this address segment.
-        /// </summary>
-        /// <param name="address">The address.</param>
-        /// <param name="values">The values.</param>
-        public void WriteBytes(ushort address, byte[] values)
-        {
-            for (var i = 0; i < values.Length; i++)
+            count = Math.Min(count, Length - address);
+            for (var i = 0; i < count; i++)
             {
-                WriteByte((ushort) (address + i), values[i]);
+                WriteByte((ushort)(address + i), buffer[i + offset]);
             }
+            return count;
         }
 
         /// <summary>

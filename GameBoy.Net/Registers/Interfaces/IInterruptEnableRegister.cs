@@ -1,5 +1,6 @@
 ﻿using GameBoy.Net.Devices;
 using Retro.Net.Memory;
+using Retro.Net.Memory.Interfaces;
 
 namespace GameBoy.Net.Registers.Interfaces
 {

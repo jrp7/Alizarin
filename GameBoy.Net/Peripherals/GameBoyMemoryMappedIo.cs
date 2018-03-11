@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using GameBoy.Net.Devices;
-using GameBoy.Net.Graphics;
+using GameBoy.Net.Devices.Interfaces;
 using GameBoy.Net.Registers.Interfaces;
 using Retro.Net.Memory;
+using Retro.Net.Memory.Interfaces;
 using Retro.Net.Z80.Peripherals;
 
 namespace GameBoy.Net.Peripherals

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using Moq;
 using Retro.Net.Memory;
+using Retro.Net.Memory.Interfaces;
 using Retro.Net.Tests.Util;
 using Shouldly;
 using Xunit;
@@ -19,11 +21,8 @@ namespace Retro.Net.Tests.Mmu
             _bytes = Rng.Bytes(ushort.MaxValue);
             
             var mmu = The<IMmu>();
-            mmu.Setup(x => x.ReadBytes(It.IsAny<ushort>(), It.IsAny<int>()))
-                .Returns((ushort address, int length) => _bytes.Skip(address).Take(length).ToArray());
-            mmu.Setup(x => x.ReadWord(It.IsAny<ushort>())).Returns((ushort address) => BitConverter.ToUInt16(_bytes, address));
-            mmu.Setup(x => x.ReadByte(It.IsAny<ushort>())).Returns((ushort address) => _bytes[address]);
-            Subject.ReBuildCache(Address);
+            mmu.Setup(x => x.GetStream(0, true, false)).Returns(new MemoryStream(_bytes));
+            Subject.Seek(Address);
         }
 
         [Fact]

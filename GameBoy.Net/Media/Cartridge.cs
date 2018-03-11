@@ -1,4 +1,6 @@
-﻿namespace GameBoy.Net.Media
+﻿using GameBoy.Net.Media.Interfaces;
+
+namespace GameBoy.Net.Media
 {
     /// <summary>
     /// A GameBoy cartridge.

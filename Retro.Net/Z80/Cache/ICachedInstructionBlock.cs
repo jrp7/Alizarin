@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Retro.Net.Memory;
 using Retro.Net.Z80.Core;
+using Retro.Net.Z80.Core.Interfaces;
 
 namespace Retro.Net.Z80.Cache
 {

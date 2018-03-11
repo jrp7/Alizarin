@@ -75,7 +75,7 @@ namespace Retro.Net.Util
                         continue;
                     }
 
-                    await Task.WhenAll(handlers.Select(Task.Run)).ConfigureAwait(false);
+                    await Task.WhenAll(handlers.Select(Task.Run));
                 }
                 catch (Exception)
                 {

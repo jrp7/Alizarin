@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Retro.Net.Memory;
+using Retro.Net.Memory.Interfaces;
 using Retro.Net.Z80.Config;
+using Retro.Net.Z80.Core.Interfaces;
 using Retro.Net.Z80.Timing;
 
 namespace Retro.Net.Z80.Core.Decode
@@ -91,7 +92,8 @@ namespace Retro.Net.Z80.Core.Decode
             _halt = _stop = false;
             _timer.Reset();
             _index = _indexRegisterOperands[IndexRegister.HL];
-            _prefetch.ReBuildCache(address);
+            _prefetch.Seek(address);
+            var baseAddress = address;
 
             while (true)
             {
@@ -143,7 +145,7 @@ namespace Retro.Net.Z80.Core.Decode
                 }
 
                 _index = _indexRegisterOperands[IndexRegister.HL];
-                address = unchecked ((ushort) (_prefetch.BaseAddress + _prefetch.TotalBytesRead));
+                address = (ushort) (baseAddress + _prefetch.TotalBytesRead);
             }
         }
 

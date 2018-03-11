@@ -1,4 +1,6 @@
-﻿namespace Retro.Net.Z80.Core
+﻿using Retro.Net.Z80.Core.Interfaces;
+
+namespace Retro.Net.Z80.Core
 {
     /// <summary>
     /// An accumulator and result structure.

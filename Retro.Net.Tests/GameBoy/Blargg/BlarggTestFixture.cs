@@ -8,10 +8,12 @@ using Autofac;
 using Autofac.Features.OwnedInstances;
 using GameBoy.Net;
 using GameBoy.Net.Config;
-using GameBoy.Net.Graphics;
+using GameBoy.Net.Devices.Graphics;
+using GameBoy.Net.Devices.Interfaces;
 using GameBoy.Net.Peripherals;
 using GameBoy.Net.Wiring;
 using Retro.Net.Z80.Core;
+using Retro.Net.Z80.Core.Interfaces;
 using Shouldly;
 
 namespace Retro.Net.Tests.GameBoy.Blargg
@@ -56,7 +58,7 @@ namespace Retro.Net.Tests.GameBoy.Blargg
 
                         if (word == "Failed" || word == "Passed")
                         {
-                            await Task.Delay(TimeSpan.FromSeconds(1), token).ConfigureAwait(false);
+                            await Task.Delay(TimeSpan.FromSeconds(1), token);
                             cancellation.Cancel();
 
                             word.ShouldBe("Passed");

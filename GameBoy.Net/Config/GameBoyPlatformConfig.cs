@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GameBoy.Net.Media;
+using GameBoy.Net.Media.Interfaces;
 using Retro.Net.Config;
 using Retro.Net.Memory;
 using Retro.Net.Z80.Config;

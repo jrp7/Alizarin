@@ -2,13 +2,16 @@
 using Autofac;
 using Retro.Net.Memory;
 using Retro.Net.Memory.Dma;
+using Retro.Net.Memory.Interfaces;
 using Retro.Net.Timing;
 using Retro.Net.Util;
+using Retro.Net.Wiring.Interfaces;
 using Retro.Net.Z80.Cache;
 using Retro.Net.Z80.Config;
 using Retro.Net.Z80.Core;
 using Retro.Net.Z80.Core.Decode;
 using Retro.Net.Z80.Core.DynaRec;
+using Retro.Net.Z80.Core.Interfaces;
 using Retro.Net.Z80.Core.Interpreted;
 using Retro.Net.Z80.Memory;
 using Retro.Net.Z80.Peripherals;

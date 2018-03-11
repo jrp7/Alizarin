@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Retro.Net.Memory;
+using Retro.Net.Memory.Interfaces;
 
 namespace Retro.Net.Z80.Peripherals
 {

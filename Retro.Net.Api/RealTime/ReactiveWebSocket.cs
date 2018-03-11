@@ -5,6 +5,7 @@ using System.Reactive.Subjects;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Retro.Net.Api.RealTime.Extensions;
 using Retro.Net.Api.RealTime.Interfaces;
 using Retro.Net.Api.RealTime.Models;
 

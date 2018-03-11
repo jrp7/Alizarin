@@ -1,5 +1,6 @@
 ﻿using Autofac.Builder;
 using Retro.Net.Z80.Core;
+using Retro.Net.Z80.Core.Interfaces;
 
 namespace Retro.Net.Wiring
 {

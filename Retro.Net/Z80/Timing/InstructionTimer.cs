@@ -71,7 +71,7 @@ namespace Retro.Net.Z80.Timing
         public async Task DelayAsync(InstructionTimings timings)
         {
             var blockFor = (long)_ticksPerCycle * timings.MachineCycles;
-            await Task.Delay(new TimeSpan(blockFor)).ConfigureAwait(false);
+            await Task.Delay(new TimeSpan(blockFor));
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace Retro.Net.Z80.Timing
                          while (_isHalted)
                          {
                              // Don't use the HPT here as it uses too much CPU.
-                             await Task.Delay(new TimeSpan(blockFor)).ConfigureAwait(false);
+                             await Task.Delay(new TimeSpan(blockFor));
                              TimingSync?.Invoke(new InstructionTimings(CyclesPerSyncEvent));
                          }
                      });

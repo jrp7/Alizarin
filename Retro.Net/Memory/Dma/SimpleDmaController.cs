@@ -56,7 +56,7 @@ namespace Retro.Net.Memory.Dma
         /// <returns></returns>
         public async Task<IDmaOperation> GetNextAsync(CancellationToken cancellationToken)
         {
-            var result = await Task.Run(async () => await _source.Task, cancellationToken).ConfigureAwait(false);
+            var result = await Task.Run(async () => await _source.Task, cancellationToken);
             _source = new TaskCompletionSource<IDmaOperation>();
             return result;
         }

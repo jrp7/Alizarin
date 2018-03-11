@@ -10,6 +10,7 @@ using Retro.Net.Z80.Config;
 using Retro.Net.Z80.Core;
 using Retro.Net.Z80.Core.Decode;
 using Retro.Net.Z80.Core.DynaRec;
+using Retro.Net.Z80.Core.Interfaces;
 using Retro.Net.Z80.Core.Interpreted;
 using Retro.Net.Z80.State;
 using Shouldly;

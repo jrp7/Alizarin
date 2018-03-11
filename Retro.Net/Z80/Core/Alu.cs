@@ -1,4 +1,5 @@
-﻿using Retro.Net.Z80.Util;
+﻿using Retro.Net.Z80.Core.Interfaces;
+using Retro.Net.Z80.Util;
 using Retro.Net.Z80.Registers;
 
 namespace Retro.Net.Z80.Core

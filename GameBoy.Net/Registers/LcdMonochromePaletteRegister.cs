@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using GameBoy.Net.Graphics;
+using GameBoy.Net.Devices.Graphics.Models;
 using GameBoy.Net.Registers.Interfaces;
 
 namespace GameBoy.Net.Registers
